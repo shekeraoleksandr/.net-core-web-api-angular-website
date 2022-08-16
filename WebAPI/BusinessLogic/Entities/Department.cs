@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Entities
 {
-    public class Department
+    public class DepartmentBL
     {
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }

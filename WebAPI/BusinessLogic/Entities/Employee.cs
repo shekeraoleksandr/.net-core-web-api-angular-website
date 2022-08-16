@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Entities
 {
-    public class Employee
+    public class EmployeeBL
     {
         public int EmployeeId { get; set; }
         public string EmployeeName { get; set; }
