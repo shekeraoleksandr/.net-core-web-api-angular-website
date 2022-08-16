@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using DataAccessLayer.EF;
-using DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
+using BusinessLogic;
+using BusinessLogic.Entities;
+using WebAPI.Models;
+using WebAPI.MappingConfig;
 using AutoMapper;
 
 
@@ -17,38 +19,58 @@ namespace WebAPI.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        //private readonly IConfiguration _configuration;
-
-        //public DepartmentController(IConfiguration configuration)
-        //{
-        //    _configuration = configuration;
-        //}
-
-        //[HttpGet]
-        //public JsonResult Get()
-        //{
-        //    string query = @"select DepartmentId, DepartmentName from dbo.Department";
-        //    DataTable table = new DataTable();
-        //    string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
-        //    SqlDataReader myReader;
-        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-        //    {
-        //        myCon.Open();
-        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
-        //        {
-        //            myReader = myCommand.ExecuteReader();
-        //            table.Load(myReader);
-
-        //            myReader.Close();
-        //            myCon.Close();
-        //        }
-        //    }
-        //    return new JsonResult(table);
-        //}
+        [HttpGet]
         public JsonResult Get()
         {
-            using var dbContext = new Context();
-            dbContext.CreateDB();
+
+            List<Department> departments = null;
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DepartmentBL, Department>());
+            var mapper = new Mapper(config);
+            using (var db = new BL())
+            {
+                departments = mapper.Map<List<Department>>(db.GetDepartments());
+                return new JsonResult(departments);
+            }
+        }
+        [HttpPost]
+        public JsonResult Post(Department dep)
+        {
+            var department = new DepartmentBL()
+            {
+                DepartmentName = dep.DepartmentName
+            };
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DepartmentBL, Department>());
+            var mapper = new Mapper(config);
+            using (var db = new BL())
+            {
+                db.AddDepartment(mapper.Map<DepartmentBL>(department));
+            }
+            return new JsonResult("Added Successfully");
+        }
+        [HttpPut]
+        public JsonResult Put(Department dep)
+        {
+            var department = new DepartmentBL()
+            {
+                DepartmentId = dep.DepartmentId,
+                DepartmentName = dep.DepartmentName
+            };
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DepartmentBL, Department>());
+            var mapper = new Mapper(config);
+            using (var db = new BL())
+            {
+                db.UpdateDepartment(mapper.Map<DepartmentBL>(department));
+            }
+            return new JsonResult("Updated Successfully");
+        }
+        [HttpDelete("{id}")]
+        public JsonResult Delete(int id)
+        {
+            using (var db = new BL())
+            {
+                db.RemoveDepartment(id);
+            }
+            return new JsonResult("Deleted Successfully");
         }
     }
 }
