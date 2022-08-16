@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Text;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Interfaces;
 using DataAccessLayer.EF;
 
 namespace DataAccessLayer.Repositories
 {
-    public class EmployeeRepository
+    public class EmployeeRepository : IRepository<Employee>
     {
         private Context DB;
         public EmployeeRepository(Context context)
         {
             DB = context;
         }
-
+        public IEnumerable<Employee> ReadAll()
+        {
+            return DB.Employees;
+        }
         public Employee Read(int id)
         {
             return DB.Employees.Find(id);
