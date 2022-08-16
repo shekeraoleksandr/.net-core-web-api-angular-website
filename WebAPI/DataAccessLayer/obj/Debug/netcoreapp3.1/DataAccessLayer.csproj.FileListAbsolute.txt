@@ -65,3 +65,4 @@ C:\Users\oleks\Desktop\.net\projects\test website\WebAPI\DataAccessLayer\obj\Deb
 C:\Users\oleks\Desktop\.net\projects\test website\WebAPI\DataAccessLayer\obj\Debug\netcoreapp3.1\DataAccessLayer.dll
 C:\Users\oleks\Desktop\.net\projects\test website\WebAPI\DataAccessLayer\obj\Debug\netcoreapp3.1\DataAccessLayer.pdb
 C:\Users\oleks\Desktop\.net\projects\test website\WebAPI\DataAccessLayer\obj\Debug\netcoreapp3.1\DataAccessLayer.genruntimeconfig.cache
+C:\Users\oleks\Desktop\.net\projects\test website\WebAPI\DataAccessLayer\obj\Debug\netcoreapp3.1\DataAccessLayer.csproj.AssemblyReference.cache

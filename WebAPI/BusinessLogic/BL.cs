@@ -7,22 +7,26 @@ using AutoMapper;
 
 namespace BusinessLogic
 {
+
     public class BL : IDisposable
     {
         private UnitOfWork DB { get; }
-
         public BL()
         {
             DB = new UnitOfWork();
         }
         public void AddDepartment(DepartmentBL department)
         {
-            DB.Departments.Create(Mapper.Map<Department>(department));
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DepartmentBL, Department>());
+            var mapper = new Mapper(config);
+            DB.Departments.Create(mapper.Map<Department>(department));
             DB.Save();
         }
         public void AddEmployee(EmployeeBL employee)
         {
-            DB.Employees.Create(Mapper.Map<Employee>(employee));
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<EmployeeBL, Employee>());
+            var mapper = new Mapper(config);
+            DB.Employees.Create(mapper.Map<Employee>(employee));
             DB.Save();
         }
         public void RemoveDepartment(int id)
@@ -38,9 +42,11 @@ namespace BusinessLogic
         public void UpdateDepartment(DepartmentBL department)
         {
             Department toUpdate = DB.Departments.Read(department.DepartmentId);
-            if(toUpdate != null)
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<DepartmentBL, Department>());
+            var mapper = new Mapper(config);
+            if (toUpdate != null)
             {
-                toUpdate = Mapper.Map<Department>(department);
+                toUpdate = mapper.Map<Department>(department);
                 DB.Departments.Update(toUpdate);
                 DB.Save();
             }
@@ -48,9 +54,11 @@ namespace BusinessLogic
         public void UpdateEmployee(EmployeeBL employee)
         {
             Employee toUpdate = DB.Employees.Read(employee.EmployeeId);
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<EmployeeBL, Employee>());
+            var mapper = new Mapper(config);
             if (toUpdate != null)
             {
-                toUpdate = Mapper.Map<Employee>(employee);
+                toUpdate = mapper.Map<Employee>(employee);
                 DB.Employees.Update(toUpdate);
                 DB.Save();
             }
@@ -58,24 +66,35 @@ namespace BusinessLogic
         public IEnumerable<DepartmentBL> GetDepartments()
         {
             List<DepartmentBL> result = new List<DepartmentBL>();
-            foreach(var item in DB.Departments.ReadAll())
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Department, DepartmentBL>());
+            var mapper = new Mapper(config);
+            foreach (var item in DB.Departments.ReadAll())
             {
-                result.Add(Mapper.Map<DepartmentBL>(item));
+                result.Add(mapper.Map<DepartmentBL>(item));
             }
             return result;
         }
         public IEnumerable<EmployeeBL> GetEmployees()
         {
             List<EmployeeBL> result = new List<EmployeeBL>();
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Employee, EmployeeBL>());
+            var mapper = new Mapper(config);
             foreach (var item in DB.Employees.ReadAll())
             {
-                result.Add(Mapper.Map<EmployeeBL>(item));
+                result.Add(mapper.Map<EmployeeBL>(item));
             }
             return result;
         }
         public void Dispose()
         {
-            throw new NotImplementedException();
+            DB.Dispose();
+        }
+    }
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+
         }
     }
 }
