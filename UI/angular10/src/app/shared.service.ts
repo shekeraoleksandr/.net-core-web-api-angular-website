@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SharedService {
 readonly APIUrl="https://localhost:5001/api";
-readonly PhotoUrl = "https://localhost:5001/Photos";
+readonly PhotoUrl = "https://localhost:5001/Photos/";
 
   constructor(private http:HttpClient) {}
 
@@ -24,7 +24,7 @@ readonly PhotoUrl = "https://localhost:5001/Photos";
   }
 
   deleteDepartment(val:any){
-    return this.http.delete(this.APIUrl+'/Department'+val);
+    return this.http.delete(this.APIUrl+'/Department/'+val);
   }
 
   getEmpList():Observable<any[]>{
